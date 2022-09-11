@@ -57,7 +57,7 @@ export default function Login() {
                                 <Link href={route("prototype.dashboard")}>
                                     <Button type="button" variant="primary">
                                         <span className="text-base font-semibold">
-                                            Start Watching
+                                            Start Learning
                                         </span>
                                     </Button>
                                 </Link>
