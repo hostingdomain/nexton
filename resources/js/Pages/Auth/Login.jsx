@@ -96,7 +96,7 @@ export default function Login() {
                                     processing={processing}
                                 >
                                     <span className="text-base font-semibold">
-                                        Start Watching
+                                        Start Learning
                                     </span>
                                 </Button>
                                 <Link href={route("register")}>
