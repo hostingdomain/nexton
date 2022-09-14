@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use Auth;
+use Carbon\Carbon;
+use Session;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -46,15 +46,14 @@ class HandleInertiaRequests extends Middleware
 
         $lastDay = Carbon::parse($activePlan->updated_at)->addMonths($activePlan->subscriptionPlan->active_period_in_months);
         $activeDays = Carbon::parse($activePlan->updated_at)->diffInDays($lastDay);
-        $remainingActiveDays = Carbon::parse($activePlan->expired_date)->diffInDays(Carbon::now());
+        $remaingActiveDays = Carbon::parse($activePlan->expired_date)->diffInDays(Carbon::now());
 
         return [
             'name' => $activePlan->subscriptionPlan->name,
-            'remainingActiveDays' => $remainingActiveDays,
+            'remainingActiveDays' => $remaingActiveDays,
             'activeDays' => $activeDays,
         ];
     }
-
 
     public function share(Request $request)
     {
@@ -67,10 +66,11 @@ class HandleInertiaRequests extends Middleware
                 'message' => Session::get('message'),
                 'type' => Session::get('type'),
             ],
-            'ziggy' => function () use ($request) {
-                return array_merge((new Ziggy)->toArray(), [
-                    'location' => $request->url(),
-                ]);
+            'env' => [
+                'MIDTRANS_CLIENTKEY' => env('MIDTRANS_CLIENTKEY')
+            ],
+            'ziggy' => function () {
+                return (new Ziggy)->toArray();
             },
         ]);
     }
